@@ -54,6 +54,12 @@ public enum OffsetStrategy {
      * Only applicable for transactional processing in combination with {@link io.micronaut.messaging.annotation.SendTo}.
      * Sends offsets to transaction using {@link org.apache.kafka.clients.producer.Producer#sendOffsetsToTransaction(java.util.Map, org.apache.kafka.clients.consumer.ConsumerGroupMetadata)}
      */
-    SEND_TO_TRANSACTION
+    SEND_TO_TRANSACTION,
+    /**
+     * Store the offsets in a {@link io.micronaut.data.annotation.Repository} and not in Kafka.
+     *
+     * @see org.apache.kafka.clients.consumer.KafkaConsumer KafkaConsumer: Storing Offsets Outside Kafka
+     */
+    LOCAL_REPOSITORY
 
 }

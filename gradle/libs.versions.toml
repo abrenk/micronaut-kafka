@@ -16,6 +16,7 @@ opentracing-mock = '0.33.0'
 zipkin-brave-kafka-clients = '6.0.3'
 
 micronaut-cache = "5.0.1"
+micronaut-data = "4.10.5"
 micronaut-logging = "1.4.0"
 micronaut-micrometer = "5.9.1"
 micronaut-reactor = "3.6.0"
@@ -38,6 +39,7 @@ zipkin-brave-kafka-clients = { module = 'io.zipkin.brave:brave-instrumentation-k
 awaitility = { module = 'org.awaitility:awaitility', version.ref = 'awaitility' }
 
 micronaut-cache = { module = "io.micronaut.cache:micronaut-cache-bom", version.ref = "micronaut-cache" }
+micronaut-data = { module = "io.micronaut.data:micronaut-data-bom", version.ref = "micronaut-data" }
 micronaut-micrometer = { module = "io.micronaut.micrometer:micronaut-micrometer-bom", version.ref = "micronaut-micrometer" }
 micronaut-reactor = { module = "io.micronaut.reactor:micronaut-reactor-bom", version.ref = "micronaut-reactor" }
 micronaut-serde = { module = "io.micronaut.serde:micronaut-serde-bom", version.ref = "micronaut-serde" }

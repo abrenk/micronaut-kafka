@@ -34,6 +34,7 @@ import io.micronaut.configuration.kafka.event.KafkaConsumerStartedPollingEvent;
 import io.micronaut.configuration.kafka.event.KafkaConsumerSubscribedEvent;
 import io.micronaut.configuration.kafka.exceptions.KafkaListenerException;
 import io.micronaut.configuration.kafka.exceptions.KafkaListenerExceptionHandler;
+import io.micronaut.configuration.kafka.offsets.KafkaOffsetRepository;
 import io.micronaut.configuration.kafka.retry.ConditionalRetryBehaviourHandler;
 import io.micronaut.configuration.kafka.seek.KafkaSeeker;
 import io.micronaut.configuration.kafka.serde.SerdeRegistry;
@@ -129,6 +130,7 @@ class KafkaConsumerProcessor
     private final ApplicationEventPublisher<KafkaConsumerStartedPollingEvent> kafkaConsumerStartedPollingEventPublisher;
     private final ApplicationEventPublisher<KafkaConsumerSubscribedEvent> kafkaConsumerSubscribedEventPublisher;
     private final ConditionalRetryBehaviourHandler conditionalRetryBehaviourHandler;
+    private final KafkaOffsetRepository offsetRepository;
 
     /**
      * Creates a new processor using the given {@link ExecutorService} to schedule consumers on.
@@ -177,6 +179,7 @@ class KafkaConsumerProcessor
         this.kafkaConsumerStartedPollingEventPublisher = startedEventPublisher;
         this.kafkaConsumerSubscribedEventPublisher = subscribedEventPublisher;
         this.conditionalRetryBehaviourHandler = conditionalRetryBehaviourHandler;
+        this.offsetRepository = beanContext.containsBean(KafkaOffsetRepository.class) ? beanContext.getBean(KafkaOffsetRepository.class) : null;
         this.beanContext.getBeanDefinitions(Qualifiers.byType(KafkaListener.class))
                 .forEach(definition -> {
                     // pre-initialize singletons before processing
@@ -350,6 +353,10 @@ class KafkaConsumerProcessor
 
     void scheduleTask(Duration delay, Runnable command) {
         taskScheduler.schedule(delay, command);
+    }
+
+    public KafkaOffsetRepository getOffsetRepository() {
+        return offsetRepository;
     }
 
     <K, V> Producer<K, V> getProducer(String id, Class<K> keyType, Class<V> valueType) {

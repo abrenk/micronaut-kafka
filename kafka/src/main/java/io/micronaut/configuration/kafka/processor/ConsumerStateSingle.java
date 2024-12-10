@@ -101,6 +101,8 @@ final class ConsumerStateSingle extends ConsumerState {
                 commitSync(consumerRecords, consumerRecord, currentOffsets);
             } else if (info.offsetStrategy == OffsetStrategy.ASYNC_PER_RECORD) {
                 kafkaConsumer.commitAsync(currentOffsets, this::resolveCommitCallback);
+            } else if (info.offsetStrategy == OffsetStrategy.LOCAL_REPOSITORY) {
+                commitToRepository(consumerRecords, consumerRecord, currentOffsets);
             }
 
             if (seek != null) {
@@ -155,6 +157,14 @@ final class ConsumerStateSingle extends ConsumerState {
         try {
             kafkaConsumer.commitSync(currentOffsets);
         } catch (CommitFailedException e) {
+            handleException(e, consumerRecords, consumerRecord);
+        }
+    }
+
+    private void commitToRepository(ConsumerRecords<?, ?> consumerRecords, ConsumerRecord<?, ?> consumerRecord, Map<TopicPartition, OffsetAndMetadata> currentOffsets) {
+        try {
+            currentOffsets.forEach(kafkaConsumerProcessor.getOffsetRepository()::save);
+        } catch (Exception e) {
             handleException(e, consumerRecords, consumerRecord);
         }
     }

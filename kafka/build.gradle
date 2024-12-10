@@ -20,12 +20,14 @@ micronaut {
 
 dependencies {
     annotationProcessor mn.micronaut.graal
+    annotationProcessor mnData.micronaut.data.processor
 
     api libs.managed.kafka.clients
 
     compileOnly mnMicrometer.micronaut.micrometer.core
     compileOnly libs.zipkin.brave.kafka.clients
     compileOnly mn.micronaut.graal
+    compileOnly mnData.micronaut.data.model
 
     testImplementation mnSerde.micronaut.serde.jackson
     testImplementation(mnReactor.micronaut.reactor)
